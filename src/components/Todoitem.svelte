@@ -24,7 +24,27 @@
         }
     ];
 
-    
+// Adding New Todo
+function addToDo(event) {
+    if (event.key === 'Enter') {
+ // Add new additional object to existing Todos items, increase id and reset title
+        todos = [...todos, {
+            id: nextId,
+            completed: false,
+            title: newToDoTitle
+        }];
+        nextId = nextId + 1;
+        newToDoTitle = '';
+    }
+}
+
+// Automatic reactive variables to filter to check number of uncompleted todos 
+$: todosRemaining = filteredTodos.filter(todo => !todo.completed).length;
+$: filteredTodos = currentFilter === 'all' ? todos : currentFilter === 'completed'
+   ? todos.filter(todo => todo.completed)
+   : todos.filter(todo => !todo.completed)
+
+   
 </script>
 
 <div class="container">
