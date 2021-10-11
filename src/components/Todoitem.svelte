@@ -1,89 +1,67 @@
 <script>
-    import Todoitem from './Todos.svelte';
-
-    //Variables
-    let newToDoTitle = '';
-    let currentFilter = 'all';
-    let nextId = 4;
-
-    let todos = [
-        {
-            id: 1,
-            title: 'My first todo',
-            completed: false
-        },
-        {
-            id: 2,
-            title: 'My second todo',
-            completed: false
-        },
-        {
-            id: 3,
-            title: 'My third todo',
-            completed: false
-        }
-    ];
-
-// Adding New Todo
-function addToDo(event) {
-    if (event.key === 'Enter') {
- // Add new additional object to existing Todos items, increase id and reset title
-        todos = [...todos, {
-            id: nextId,
-            completed: false,
-            title: newToDoTitle
-        }];
-        nextId = nextId + 1;
-        newToDoTitle = '';
-    }
-}
-
-// Automatic reactive variables to filter to check number of uncompleted todos 
-$: todosRemaining = filteredTodos.filter(todo => !todo.completed).length;
-$: filteredTodos = currentFilter === 'all' ? todos : currentFilter === 'completed'
-   ? todos.filter(todo => todo.completed)
-   : todos.filter(todo => !todo.completed)
-
-   
-</script>
-
-<div class="container">
-    <img src={'./images/flagAfrica.png'} alt="Flags of African countries in African continent" class="logo">
-    
-    <h1>
-        To Do App
-    </h1>
-    <input type="text" class="todo-input" placeholder="Insert to-do item" bind:value={newToDoTitle} on:keydown={addToDo}>
-
-    <!-- Output -->
-    {#each filteredTodos as todo}
-        <div class="todo-item">
-            <Todoitem {...todo} on:deleteTodo={handleDeleteTodo} on:toggleComplete={handleToggleComplete} />
-        </div>
-    {/each}
-
-    <div class="inner-container">
-        <div><label><input class="inner-container-input" type="checkbox" on:change={checkAllTodos}>Check All</label></div>
-        <div>{todosRemaining} items left</div>
-    </div>
-
-    <div class="inner-container">
-        <div>
-            <button on:click={() => updateFilter('all')} class:active="{currentFilter === 'all'}">All</button>
-            <button on:click={() => updateFilter('active')} class:active="{currentFilter === 'active'}">Active</button>
-            <button on:click={() => updateFilter('completed')} class:active="{currentFilter === 'completed'}">Completed</button>
-        </div>
-        <div>
-            <button on:click={clearCompleted}>Clear Completed</button>
-        </div>
-    </div>
-</div>
-
-
-
-<style>
-   .logo {
-       max-width: 100px;
-       border-radius: 10px;
+    import { createEventDispatcher } from 'svelete';
+    import { fly } from 'svelte/transition';
+ 
+ //Pulling Todoitem properties from object as single elements passing as parameters in components 
+    export let id;
+    export let title;
+    export let completed;
+ 
+    const dispatch = createEventDispatcher();
+ 
+ //User hits x dispatch new event and delete id using eventhandler switches to handleDeleteTodo and removes item
+ function deleteTodo() {
+    dispatch('deleteTodo', {
+        id: id
+    });
+ }
+ 
+ //Function handles by passing id property in event.detail object checks which state should be toggled
+ function toggleComplete() {
+     dispatch('toggleComplete', {
+         id: id
+     });
+ }
+ </script>
+ 
+ 
+ 
+ <div class="todo-item"> 
+     <!--Animation transition appearance of todo item using in-built-svelte fly -->
+     <div class="todo-item-left" transition:fly={{ y: 20, duration: 300}}>
+         <input type="checkbox" bind:checked={completed} on:change={toggleComplete}>
+         <div class="todo-item-label" class:completed={completed}>{title}</div>
+     </div>
+     <div class="remove-item" on:click={deleteTodo}>x</div>
+ </div>
+ 
+ 
+ 
+ <style>
+   .todo-item {
+       margin-bottom: 15px;
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+       animation-duration: 0.2s;
    }
-</style>
+   .todo-item-left {
+       display: flex;
+       align-items: center;
+   }
+   .todo-item-label {
+       border: 1px solid white;
+       margin-left: 12px;
+   }
+   .remove-item {
+       cursor: pointer;
+       margin-left: 15px;
+   }
+   .remove-item:hover {
+       color:cyan;
+   }
+   .completed {
+       text-decoration: line-through;
+       color: grey;
+ }
+ </style>

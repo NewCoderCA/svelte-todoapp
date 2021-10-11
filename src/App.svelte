@@ -1,9 +1,9 @@
 <script>
-	export let name;
+	import Todos from './components/Todos.svelte';
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
+   <Todos />
 </main>
 
 <style>
