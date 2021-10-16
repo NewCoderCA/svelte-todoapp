@@ -82,7 +82,7 @@ function handleToggleComplete(event) {
     <img src={'./images/flagAfrica.png'} alt="Flags of African countries in African continent" class="logo">
     
     <h2>To Do App</h2>
-    <input type="text" class="todo-input" placeholder="Insert to-do item" bind:value={newToDoTitle} on:keydown={addToDo}> -->
+    <input type="text" class="todo-input" placeholder="Insert to-do item" bind:value={newToDoTitle} on:keydown={addToDo}>
 
     <!-- Output -->
      {#each filteredTodos as todo}
@@ -118,7 +118,10 @@ function handleToggleComplete(event) {
 		font-weight: 100;
 	}
     .logo {
-        max-width: 100px;
+        display: block;
+        margin: 20px auto;
+        width: 50%;
+         /*max-width: 100px; */
         border-radius: 10px;
     }
     .container {

@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher } from 'svelete';
+    import { createEventDispatcher } from 'svelte';
     import { fly } from 'svelte/transition';
  
  //Pulling Todoitem properties from object as single elements passing as parameters in components 
@@ -28,7 +28,7 @@
  
  <div class="todo-item"> 
      <!--Animation transition appearance of todo item using in-built-svelte fly -->
-     <div class="todo-item-left" transition:fly={{ y: 20, duration: 300}}>
+     <div class="todo-item-left" transition:fly="{{ y: 20, duration: 300}}">
          <input type="checkbox" bind:checked={completed} on:change={toggleComplete}>
          <div class="todo-item-label" class:completed={completed}>{title}</div>
      </div>
